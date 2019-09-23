@@ -30,6 +30,8 @@
 #include "GSMScanner.h"
 #include "GSMPIN.h"
 #include "GSMBand.h"
+#include "GSMFTP.h"
+#include "GSMFileSystem.h"
 
 #include "GSMSSLClient.h"
 #include "GSMUdp.h"
