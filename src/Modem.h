@@ -38,6 +38,7 @@ public:
   void end();
 
   void debug();
+  void debug(Print& p);
   void noDebug();
 
   int autosense(unsigned int timeout = 10000);
@@ -66,6 +67,8 @@ public:
   void addUrcHandler(ModemUrcHandler* handler);
   void removeUrcHandler(ModemUrcHandler* handler);
 
+  void setBaudRate(unsigned long baud);
+
 private:
   Uart* _uart;
   unsigned long _baud;
@@ -83,8 +86,8 @@ private:
   String* _responseDataStorage;
 
   #define MAX_URC_HANDLERS 10 // 7 sockets + GPRS + GSMLocation + GSMVoiceCall
-  static bool _debug;
   static ModemUrcHandler* _urcHandlers[MAX_URC_HANDLERS];
+  static Print* _debugPrint;
 };
 
 extern ModemClass MODEM;

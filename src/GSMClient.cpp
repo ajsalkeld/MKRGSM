@@ -121,11 +121,7 @@ int GSMClient::ready()
     }
 
     case CLIENT_STATE_MANAGE_SSL_PROFILE: {
-      if (_host != NULL) {
-        MODEM.sendf("AT+USECPRF=0,0,1,4,\"%s\"", _host);
-      } else {
-        MODEM.send("AT+USECPRF=0,0,1");
-      }
+      MODEM.send("AT+USECPRF=0,0,1");
 
       _state = CLIENT_STATE_WAIT_MANAGE_SSL_PROFILE_RESPONSE;
       ready = 0;
@@ -246,7 +242,7 @@ int GSMClient::connect()
     }
 
     if (_socket == -1) {
-      return 2;
+      return 0;
     }
   }
 
@@ -283,6 +279,7 @@ size_t GSMClient::write(const uint8_t* buf, size_t size)
   size_t written = 0;
   String command;
 
+  command.reserve(19 + (size > 256 ? 256 : size) * 2);
 
   while (size) {
     size_t chunkSize = size;
@@ -291,9 +288,7 @@ size_t GSMClient::write(const uint8_t* buf, size_t size)
       chunkSize = 256;
     }
 
-    command.reserve(19 + chunkSize * 2);
-
-    command += "AT+USOWR=";
+    command = "AT+USOWR=";
     command += _socket;
     command += ",";
     command += chunkSize;
